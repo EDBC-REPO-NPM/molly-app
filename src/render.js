@@ -29,7 +29,7 @@
 
 	const _loadBases_ = function( bases ){
 		try{
-			bases.map( (base,index)=>{
+			bases.map( (base)=>{
 				
 				const mimeType = base.getAttribute('type') || 'image/png';
 
@@ -37,7 +37,7 @@
 				const file = base64toBlob( data, mimeType );
 				const url = URL.createObjectURL( file );
 
-				if( base.getAttribute('lazy') )
+				if ( base.getAttribute('lazy') )
 					 base.setAttribute('data-src',url);
 				else base.setAttribute('src',url);
 
@@ -89,9 +89,7 @@
 
 	const _loadLazys_ = function( lazys ){
 		try{ 
-			lazys.map( lazy=>{ 
-				observer.observe( lazy );
-			});
+			lazys.map( lazy=>{ observer.observe( lazy ); });
 		} catch(e) {/* console.log(e); */} 
 	}
 	
@@ -101,7 +99,7 @@
 		return new Promise(async(response,reject)=>{
 			try{ 
 
-				const el = _$(body,'load[src]');
+				const el = $$(body,'load[src]');
 				for( var i in el ){ const x = el[i];
 					try{ 
 						const res = await fetch(x.getAttribute('src'));
@@ -121,7 +119,7 @@
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
 	const _loadScripts_ = async function(body){
-		const scripts = _$(body,'script[type=module],script:not([type]),script[type~=javascript]');
+		const scripts = $$(body,'script[type=module],script:not([type]),script[type~=javascript]');
 		for(var i in scripts){ 
 
 			const content = scripts[i].innerHTML;
@@ -140,7 +138,7 @@
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
 	const _loadStyles_ = async function(body){
-		const links = _$(body,'style');
+		const links = $$(body,'style');
 		for(var i in links){ 
 
 			const content = links[i].innerHTML;
@@ -162,7 +160,7 @@
 	const _loadToggle_ = async function(element){
 
 		function toggle(id) {
-			_$(id).map( x=> x.hidden = x.hidden ? false : true );
+			$$(id).map( x=> x.hidden = x.hidden ? false : true );
 		}
 
 		for( var i in element ){ 
@@ -183,20 +181,20 @@
 			if( window['_changing_'] ) return undefined;
 				window['_changing_'] = true;
 			
-			await _loadBases_(_$('*[b64]'));
-			await _loadLazys_(_$('*[lazy]'));
-			await _loadToggle_(_$('*[toggle]'));
+			      _loadBases_($$('*[b64]'));
+			      _loadLazys_($$('*[lazy]'));
+			await _loadToggle_($$('*[toggle]'));
 
-			_$($('body'),'script').map((x)=>x.remove());
+			$$($('body'),'script').map((x)=>x.remove());
 
 			const data = $('body').innerHTML;
 			const element = createElement('body');
 				  element.innerHTML = data;
 			
-			//	  await _loadDOM_(element);
-				  await _loadCode_(element);
-				  await _loadStyles_(element);
-				  await _loadScripts_(element);
+		//	await _loadDOM_(element);
+			await _loadCode_(element);
+			await _loadStyles_(element);
+			await _loadScripts_(element);
 			
 			const out = element.innerHTML;
 
@@ -206,6 +204,6 @@
 		} catch(e) {/* console.error(e) */}
 	}
 
-module.exports = _loadComponents_;
+	module.exports = _loadComponents_;
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //

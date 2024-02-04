@@ -1,16 +1,17 @@
+const state = require('./state.js');
 const output = new Object();
 
 function getState(){
     const state = new Object();
     const storage = window.localStorage;
     for( let i=storage.length; i--; ){
-        const key = storage.key(i);
+        const key  = storage.key(i);
         const data = storage.getItem(key);
         state[key] = data;
     }   return state;
 }
 
-output.state = new window.molly.state( getState() );
+output.state = new state( getState() );
 
 output.set = function(obj){ let state;
     try { state = obj(output.state.state); } 
@@ -23,8 +24,9 @@ output.clear = function(){
     return window.localStorage.clear();
 }
 
-output.get = function(item){ return output.state.get(item) }
-output.observeField = function(...args){ return output.state.observeField(...args) }
-output.unObserveField = function(...args){ return output.state.unObserveField(...args) }
+output.get  = function(item)   { return output.state.get(item); }
+output.on   = function(...args){ return output.state.on(...args); }
+output.off  = function(...args){ return output.state.off(...args); }
+output.once = function(...args){ return output.state.once(...args); }
 
 module.exports = output;

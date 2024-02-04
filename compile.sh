@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo 'building bundle.js (molly-js)'
+echo 'building app.js'
 #browserify -t [ babelify --presets [@babel/preset-env] ] ./js/main.js > ./minify.js
-browserify ./bundle/js/main.js > ./main.js
+browserify ./src/app.js -o ./app.js

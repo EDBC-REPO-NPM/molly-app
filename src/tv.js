@@ -1,8 +1,9 @@
+const state  = require('./state.js');
 const output = new Object();
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-output.state = new molly.state({
+output.state = new state({
     parent: null, target: null,
     button:'', ok:0, key:'',
     event:'', topology:null,
@@ -10,14 +11,14 @@ output.state = new molly.state({
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-output.set = function(obj){ output.state.set(obj) }
-output.get = function(item){ return output.state.get(item) }
-output.observeField = function(...args){ return output.state.observeField(...args) }
-output.unObserveField = function(...args){ return output.state.unObserveField(...args) }
+output.get  = function(item)   { return output.state.get(item); }
+output.on   = function(...args){ return output.state.on(...args); }
+output.off  = function(...args){ return output.state.off(...args); }
+output.once = function(...args){ return output.state.once(...args); }
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-output.state.observeField('target',(a,b)=>{
+output.state.on('target',(a,b)=>{
     a?.setAttribute('focused',false);
     b?.setAttribute('focused',true);
     a?.removeAttribute('focused');
@@ -107,14 +108,14 @@ function setTarget( X,Y ){
         const pos = output.state.state.topology.pos;
 
         if( pos[0] < 0 ){
-            if( output.state.state.topology.opt.loop )
+            if ( output.state.state.topology.opt.loop )
                  output.state.state.topology.pos[0] = XSize-1;
             else output.state.state.topology.pos[0] = 0;
             output.set({ event: 'left' });
             return setTarget( 0,0 );
         }
         else if( pos[0] >= XSize ){
-            if( output.state.state.topology.opt.loop )
+            if ( output.state.state.topology.opt.loop )
                  output.state.state.topology.pos[0] = 0;
             else output.state.state.topology.pos[0] = XSize-1;
             output.set({ event: 'right' });
@@ -122,14 +123,14 @@ function setTarget( X,Y ){
         }
 
         if( pos[1] < 0 ){
-            if( output.state.state.topology.opt.loop )
+            if ( output.state.state.topology.opt.loop )
                  output.state.state.topology.pos[1] = YSize-1;
             else output.state.state.topology.pos[1] = 0;
             output.set({ event: 'top' });
             return setTarget( 0,0 );
         }
         else if( pos[1] >= YSize ){
-            if( output.state.state.topology.opt.loop )
+            if ( output.state.state.topology.opt.loop )
                  output.state.state.topology.pos[1] = 0;
             else output.state.state.topology.pos[1] = YSize-1;
             output.set({ event: 'bottom' });
@@ -146,7 +147,7 @@ function setTarget( X,Y ){
     } catch(e) { }
 }
 
-output.state.observeField('button',(a,b)=>{
+output.state.on('button',(a,b)=>{
 
          if( b == 'up' )   setTarget( 0,-1);
     else if( b == 'down' ) setTarget( 0, 1);
@@ -164,16 +165,15 @@ output.state.observeField('button',(a,b)=>{
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
 window.addEventListener('keydown',({key})=>{ output.state.set({ key: key });
-    if( (/enter/i).test(key) )      return output.state.set({ button: 'ok' });
-    if( (/arrowup/i).test(key))     return output.state.set({ button: 'up' });
-    if( (/escape/i).test(key) )     return output.state.set({ button: 'menu' });
-    if( (/arrowdown/i).test(key) )  return output.state.set({ button: 'down' });
-    if( (/arrowleft/i).test(key) )  return output.state.set({ button: 'left' });
-    if( (/backspace/i).test(key) )  return output.state.set({ button: 'back' });
-    if( (/arrowright/i).test(key))  return output.state.set({ button: 'right' });
+    if( (/enter/i).test(key) )     return output.state.set({ button: 'ok' });
+    if( (/arrowup/i).test(key))    return output.state.set({ button: 'up' });
+    if( (/escape/i).test(key) )    return output.state.set({ button: 'menu' });
+    if( (/arrowdown/i).test(key) ) return output.state.set({ button: 'down' });
+    if( (/arrowleft/i).test(key) ) return output.state.set({ button: 'left' });
+    if( (/backspace/i).test(key) ) return output.state.set({ button: 'back' });
+    if( (/arrowright/i).test(key)) return output.state.set({ button: 'right' });
 });
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-window.focus = output.focus;
 module.exports = output;

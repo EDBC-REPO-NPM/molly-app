@@ -117,5 +117,4 @@ function HTTPrequest( ..._args ){
     });    
 }
 
-
 module.exports = HTTPrequest;

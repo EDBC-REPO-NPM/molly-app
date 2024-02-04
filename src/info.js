@@ -1,3 +1,4 @@
+const state = require('./state.js');
 const output = new Object();
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
@@ -20,7 +21,7 @@ function slugify( text ){
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 	
-output.isMobile = (req,res)=>{
+output.isMobile = ()=>{
 	const match = [ 
 		/Windows Phone/i, /BlackBerry/i, /webOS/i, 
 		/iPad/i,          /iPod/i,       /Android/i, 
@@ -32,14 +33,14 @@ output.isMobile = (req,res)=>{
 	});
 }
 
-output.isDesktop = (req,res)=>{
+output.isDesktop = ()=>{
 	return [
-		!output.isTV(req,res),
-		!output.isMobile(req,res),
+		!output.isTV(),
+		!output.isMobile(),
 	].every( x=>x );
 }
 
-output.isTV = (req,res)=>{
+output.isTV = ()=>{
 	const match = [ 
 		/SmartTV/i,   /Espial/i,    /Opera TV/i, 
 		/inetTV/i,    /HbbTV/i,     /LG Browser/i, 
@@ -53,7 +54,7 @@ output.isTV = (req,res)=>{
 	});
 }
 	
-output.getBrowser = (req,res)=>{
+output.getBrowser = ()=>{
 	const data = navigator.userAgent;
 	const match = [ 
 		/Chrome/i, /Chromium/i, /Safari/i, 
@@ -66,7 +67,7 @@ output.getBrowser = (req,res)=>{
 	}	return 'generic';
 }
 	
-output.getOS = (req,res)=>{
+output.getOS = ()=>{
 	const match = [ 
 		/Windows Phone/i, /BlackBerry/i, /Android/i,
 		/iPhone/i,        /webOS/i,      /iPad/i, 
@@ -99,7 +100,7 @@ output.getSize = function( _bool ){
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-output.state = new molly.state({
+output.state = new state({
 	height: window.innerHeight,
     width: window.innerWidth,
 	size: output.getSize(),
@@ -122,10 +123,10 @@ window.addEventListener('resize',function(){
 	});
 });
 
-output.set = function(obj){ output.state.set(obj) }
-output.get = function(item){ return output.state.get(item) }
-output.observeField = function(...args){ return output.state.observeField(...args) }
-output.unObserveField = function(...args){ return output.state.unObserveField(...args) }
+output.get  = function(item)   { return output.state.get(item); }
+output.on   = function(...args){ return output.state.on(...args); }
+output.off  = function(...args){ return output.state.off(...args); }
+output.once = function(...args){ return output.state.once(...args); }
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
