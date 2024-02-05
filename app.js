@@ -33,21 +33,12 @@
 	
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 	
-	output.removeEvent = function( ID ){ 
-		for( let i in  _ev_ ){
-			const x =  _ev_[i]; if( x[3] == ID ){
-				x[0].removeEventListener( x[1],x[2],true ); 
-				 _ev_.splice(i,1);				
-				return 0; 
-			}
-		}
+	output.removeEvent = function( ...args ){ 
+		args[0].removeEventListener( args[1], args[2], true ); 
 	}
 
 	output.addEvent = function( ...args ){ 
-		args[0].addEventListener( args[1],args[2],true ); 
-		const data = [...args,eventID()];
-		 _ev_.push( data) ;
-		return data[3]; 
+		args[0].addEventListener( args[1], args[2], true ); 
 	}
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
