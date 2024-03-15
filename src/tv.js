@@ -18,7 +18,7 @@ output.once = function(...args){ return output.state.once(...args); }
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-output.state.on('target',(a,b)=>{
+output.state.on('target',function(a,b){
     a?.setAttribute('focused',false);
     b?.setAttribute('focused',true);
     a?.removeAttribute('focused');
@@ -40,8 +40,8 @@ function parseOpt( element ){
                         .replace(/\t|\n| /gi,'')
                         .split(';');
     const obj = new Object();
-    for( let i in options ) obj[i] = options[i];
-    for( let i in attr ){
+    for( var i in options ) obj[i] = options[i];
+    for( var i in attr ){
         const data = attr[i].split(':');
         if(!data[1]) continue; 
         obj[data[0]]= data[1];
@@ -58,7 +58,7 @@ function parseFocus( element ){
 
     if( node.opt.keep ) 
         node.pos = element.hasAttribute('pos') ? 
-                   element.getAttribute('pos').split(' ').map(x=>+x) : [0,0];
+                   element.getAttribute('pos').split(' ').map(function(x){ return +x }) : [0,0];
 
     else if( node.opt.size == 'vertical' ) node.opt.size = 0;
     
@@ -70,7 +70,7 @@ function parseFocus( element ){
 output.focus = function( element ){
     
     if( !element.hasAttribute('focus') ){
-        let parent = element.parentElement;
+        var parent = element.parentElement;
         do {
             try{parent.scrollTo({ 
                     left: element.offsetLeft-(element.clientWidth/2),
@@ -100,7 +100,7 @@ function setTarget( X,Y ){
         ];
 
         Array.from(document.querySelectorAll('[focus-item]'))
-                           .map(x=>x?.setAttribute('focused',false));    
+                           .map(function(x){ x?.setAttribute('focused',false) });    
 
         const items = output.state.state.parent.querySelectorAll('[focus-item]');
         const YSize = Math.ceil(items.length / output.state.state.topology.opt.size);
@@ -147,7 +147,7 @@ function setTarget( X,Y ){
     } catch(e) { }
 }
 
-output.state.on('button',(a,b)=>{
+output.state.on('button',function(a,b){
 
          if( b == 'up' )   setTarget( 0,-1);
     else if( b == 'down' ) setTarget( 0, 1);
@@ -164,7 +164,7 @@ output.state.on('button',(a,b)=>{
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-window.addEventListener('keydown',({key})=>{ output.state.set({ key: key });
+window.addEventListener('keydown',function({key}){ output.state.set({ key: key });
     if( (/enter/i).test(key) )     return output.state.set({ button: 'ok' });
     if( (/arrowup/i).test(key))    return output.state.set({ button: 'up' });
     if( (/escape/i).test(key) )    return output.state.set({ button: 'menu' });

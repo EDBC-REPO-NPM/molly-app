@@ -58,23 +58,23 @@ output.getShot = function( _stream, _width=1024, _height=720, _type="image/webp"
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-output.stopMediaStream = function( _stream ){ _stream.getTracks().forEach(item=>item.stop()) }
+output.stopMediaStream = function( _stream ){ _stream.getTracks().forEach(function(item){item.stop()}) }
 	
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-output.stopRecording = function( _recorder ){ _recorder.mediaRecorder.stop(); }
+output.stopRecording  = function( _recorder ){ _recorder.mediaRecorder.stop(); }
 output.startRecording = function( _recorder ){
     const mediaRecorder = new MediaRecorder( _recorder );
          _recorder.mediaRecorder = mediaRecorder;
     const data = new Array();
 
-    _recorder.mediaRecorder.ondataavailable = (event)=>{
+    _recorder.mediaRecorder.ondataavailable = function(event){
         data.push( event.data );
     };	_recorder.mediaRecorder.start();
     
-    const promise = new Promise( (res,rej)=>{
-        _recorder.mediaRecorder.onerror = (err)=> rej(err);
-        _recorder.mediaRecorder.onstop = ()=>res(data);
+    const promise = new Promise(function(res,rej){
+        _recorder.mediaRecorder.onerror = function(err){ rej(err);  }
+        _recorder.mediaRecorder.onstop  = function()   { res(data); }
     });	return promise;
 }
 

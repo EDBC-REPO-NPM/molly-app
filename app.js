@@ -905,7 +905,7 @@ class Output {
 
     on( ...args ){ return this.obsrv.on( ...args ); }
 
-    get( item ){ return state[item]; }
+    get( item ){ return this.state[item]; }
 
     /*---------------------------------------------------------*/
 

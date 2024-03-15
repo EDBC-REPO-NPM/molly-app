@@ -1,9 +1,9 @@
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
-	let observer = undefined; try{
-		observer = new IntersectionObserver( (entries, observer)=>{
-			entries.map( entry=>{
+	var observer = undefined; try{
+		observer = new IntersectionObserver(function(entries, observer){
+			entries.map( function(entry){
 	
 				const object = entry.target;
 				const placeholder = object.src;
@@ -12,7 +12,7 @@
 					object.src = object.getAttribute('lazy');
 					observer.unobserve( object );
 					object.removeAttribute('lazy');
-					object.addEventListener('error',(el)=>{
+					object.addEventListener('error',function(el){
 						try{const clss = object.getAttribute('class');
 							const newElement = createElement( object.tagName );
 								  newElement.setAttribute('src',placeholder);
@@ -29,7 +29,7 @@
 
 	const _loadBases_ = function( bases ){
 		try{
-			bases.map( (base)=>{
+			bases.map( function(base){
 				
 				const mimeType = base.getAttribute('type') || 'image/png';
 
@@ -51,10 +51,10 @@
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
 	const _loadCode_ = function( body ){ 
-		return new Promise(async(response,reject)=>{
+		return new Promise(async function (res,rej){
 			try{ 
 
-				let data = body.innerHTML;
+				var data = body.innerHTML;
 					data = data.replace(/\&gt\;/gi,'>');
 					data = data.replace(/\&lt\;/gi,'<');
 				const fragmt = data.match(/\<\°[^°]+\°\>/gi);
@@ -80,23 +80,22 @@
 				}
 
 				body.innerHTML = data;
-				if( script || fragmt ) response( _loadCode_(body) );
-			} catch(e) {/* console.log(e) */} response();
+				if( script || fragmt ) res( _loadCode_(body) );
+			} catch(e) {/* console.log(e) */} res();
 		})
 	}
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
 	const _loadLazys_ = function( lazys ){
-		try{ 
-			lazys.map( lazy=>{ observer.observe( lazy ); });
-		} catch(e) {/* console.log(e); */} 
+		try { lazys.map(function(lazy){ observer.observe( lazy ); }); } 
+		catch(e) {/* console.log(e); */} 
 	}
 	
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 
 	async function _loadDOM_(body){
-		return new Promise(async(response,reject)=>{
+		return new Promise(async function(res,rej){
 			try{ 
 
 				const el = $$(body,'load[src]');
@@ -111,8 +110,8 @@
 					}
 				}
 
-				if( el.length ) response( _loadDOM_(body) );
-			} catch(e) {/* console.log(e) */} response();
+				if( el.length ) res( _loadDOM_(body) );
+			} catch(e) {/* console.log(e) */} res();
 		});
 	}
 
@@ -160,13 +159,13 @@
 	const _loadToggle_ = async function(element){
 
 		function toggle(id) {
-			$$(id).map( x=> x.hidden = x.hidden ? false : true );
+			$$(id).map( function(x){ x.hidden =! x.hidden } );
 		}
 
 		for( var i in element ){ 
 			const id = element[i].getAttribute('toggle');
 			element[i].removeAttribute('toggle');
-			element[i].addEventListener('click',()=>{
+			element[i].addEventListener('click',function(){
 				toggle( id );
 			});
 		}
@@ -181,11 +180,11 @@
 			if( window['_changing_'] ) return undefined;
 				window['_changing_'] = true;
 			
-			      _loadBases_($$('*[b64]'));
-			      _loadLazys_($$('*[lazy]'));
+			      _loadBases_ ($$('*[b64]'));
+			      _loadLazys_ ($$('*[lazy]'));
 			await _loadToggle_($$('*[toggle]'));
 
-			$$($('body'),'script').map((x)=>x.remove());
+			$$($('body'),'script').map(function(x){ x.remove() });
 
 			const data = $('body').innerHTML;
 			const element = createElement('body');

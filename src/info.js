@@ -12,7 +12,7 @@ function slugify( text ){
 		'':'\\W+|\\t+|\\n+| +',
 	};
 	
-	Object.keys(reg).map( x=>{
+	Object.keys(reg).map(function(x){
 		const key = new RegExp(reg[x],'gi');
 		text = text.replace(key,x);
 	});	return text.toLowerCase();
@@ -21,53 +21,53 @@ function slugify( text ){
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 	
-output.isMobile = ()=>{
+output.isMobile = function(){
 	const match = [ 
 		/Windows Phone/i, /BlackBerry/i, /webOS/i, 
 		/iPad/i,          /iPod/i,       /Android/i, 
 		/iPhone/i,        /Mobile/i 
 	];
-	return match.some( (item) => {
+	return match.some( function(item){
 		const data = navigator.userAgent;
 	    return item.test(slugify(data));
 	});
 }
 
-output.isDesktop = ()=>{
+output.isDesktop = function(){
 	return [
 		!output.isTV(),
 		!output.isMobile(),
-	].every( x=>x );
+	].every(function(x){ return x; });
 }
 
-output.isTV = ()=>{
+output.isTV = function(){
 	const match = [ 
 		/SmartTV/i,   /Espial/i,    /Opera TV/i, 
 		/inetTV/i,    /HbbTV/i,     /LG Browser/i, 
 		/Viera/i,     /PhilipsTV/i, /POV_TV/i, 
-		/Roku/i,      /AppleTV/i,   /GoogleTV/i, 
+		/Roku/i,      /AppvarV/i,   /GoogvarV/i, 
 		/technisat/i, /TV/i,
 	];
-	return match.some( (item) => {
+	return match.some(function(item){
 		const data = navigator.userAgent;
 	    return item.test(slugify(data));
 	});
 }
 	
-output.getBrowser = ()=>{
+output.getBrowser = function(){
 	const data = navigator.userAgent;
 	const match = [ 
 		/Chrome/i, /Chromium/i, /Safari/i, 
 		/Opera/i,  /Mozilla/i, 
 	];
 
-	for( let i in match ){		
+	for( var i in match ){		
 		if( match[i].test(slugify(data)) )
 			return match[i].source;
 	}	return 'generic';
 }
 	
-output.getOS = ()=>{
+output.getOS = function(){
 	const match = [ 
 		/Windows Phone/i, /BlackBerry/i, /Android/i,
 		/iPhone/i,        /webOS/i,      /iPad/i, 
@@ -77,7 +77,7 @@ output.getOS = ()=>{
 		/Apple/i
 	];
 		
-	for( let i in match ){
+	for( var i in match ){
 		const data = navigator.userAgent;
 		if( match[i].test(slugify(data)) )
 			return match[i].source;
@@ -92,7 +92,7 @@ output.getSize = function( _bool ){
 		[900,'large'], [1100,'xlarge'],
 	];
 		
-	for( let i=size.length; i--; ){
+	for( var i=size.length; i--; ){
 		if( window.innerWidth > size[i][0] )	
 			return !_bool ? size[i][1] : i;
 	}

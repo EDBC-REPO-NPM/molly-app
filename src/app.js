@@ -4,31 +4,21 @@
 	
 	output.$ = function( ...args ){
 		return ( args.length > 1 ) ? 
-			args[0].querySelector(args[1]):
+			args[0] .querySelector(args[1]):
 			document.querySelector(args[0]);
 	};
 
 	output.$$ = function( ...args ){
 		return ( args.length > 1 ) ? 
-			Array.from(args[0].querySelectorAll(args[1])):
+			Array.from(args[0] .querySelectorAll(args[1])):
 			Array.from(document.querySelectorAll(args[0]));
 	};
-
-// ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
-
-	const _ev_ = new Array(); function eventID(){
-        const item = 'abcdefghijklmn0123456789'.split('');
-        const result = new Array(); for( let i=64; i--; ){
-            const index = Math.floor( Math.random()*item.length );
-            result.push( item[index] );
-        }   return result.join('');
-    }
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 	
 	output.XML = new Object();
 	output.XML.stringify = function( _object ){ return new XMLSerializer().serializeToString( _object ); }
-	output.XML.parse = function( _string, mime="text/xml" ){ return new DOMParser().parseFromString( _string,mime ); }
+	output.XML.parse     = function( _string, mime="text/xml" ){ return new DOMParser().parseFromString( _string,mime ); }
 	
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 	
@@ -38,6 +28,10 @@
 
 	output.addEvent = function( ...args ){ 
 		args[0].addEventListener( args[1], args[2], true ); 
+	}
+
+	output.onLoad = function( cb ){
+		output.addEvent( window, 'load', cb );
 	}
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
@@ -58,7 +52,7 @@
 			'':'\\W+|\\t+|\\n+| +',
 		};
 		
-		Object.keys(reg).map( x=>{
+		Object.keys(reg).map( function(x){
 			const key = new RegExp(reg[x],'gi');
 			text = text.replace(key,x);
 		});	return text.toLowerCase();
@@ -89,9 +83,9 @@
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //
 	
-	window.addEventListener( 'load',()=>{
-		new MutationObserver( ()=>{ output.render(); });
-		(()=>{ output.hash(); output.render(); })();
+	output.onLoad( function(){
+		new MutationObserver( function(){ output.render(); });
+		(function(){ output.hash(); output.render(); })();
 	});
 
 // ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── //

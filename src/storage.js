@@ -4,7 +4,7 @@ const output = new Object();
 function getState(){
     const state = new Object();
     const storage = window.localStorage;
-    for( let i=storage.length; i--; ){
+    for( var i=storage.length; i--; ){
         const key  = storage.key(i);
         const data = storage.getItem(key);
         state[key] = data;
@@ -13,10 +13,10 @@ function getState(){
 
 output.state = new state( getState() );
 
-output.set = function(obj){ let state;
+output.set = function(obj){ var state;
     try { state = obj(output.state.state); } 
     catch(e) { state = obj } output.state.set(obj);
-    for( let i in state ) window.localStorage.setItem(i,state[i]);
+    for( var i in state ) window.localStorage.setItem(i,state[i]);
 }
 
 output.clear = function(){ 

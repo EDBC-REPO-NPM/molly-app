@@ -13,9 +13,9 @@ const headers = {
 
 function parseProxy( _args ){
 
-    let _url = _args[0]?.url || _args[0] || window.location.href;
+    var _url = _args[0]?.url || _args[0] || window.location.href;
         _url = _url.replace(/\.\//gi,window.location.href);
-    let opt = new URL( _url ); 
+    var opt = new URL( _url ); 
         
     opt.port = typeof opt?.port == 'string' ? +opt.port : (/^https/i).test( _args[0]?.url || _args[0] ) ? 443 : 80;
     opt.protocol = (/^https/i).test(_url) ? 'https' : 'http';
@@ -42,15 +42,15 @@ function parseURL( _args ){
     opt.referrerPolicy = "strict-origin-when-cross-origin";
     process.chunkSize = _args[1]?.chunkSize || _args[0]?.chunkSize || Math.pow(10,6) * 3;
 
-    for( let i in headers ){ 
-        const key = i.match(/\w+/gi).map(x=>{
+    for( var i in headers ){ 
+        const key = i.match(/\w+/gi).map(function(x){
             const st = x.match(/^\w/gi).join('');
             return x.replace(st,st.toLowerCase());
         }).join('-'); opt.headers[key] = headers[i]
     }
 
-    for( let i in tmp_headers ){ 
-        const key = i.match(/\w+/gi).map(x=>{
+    for( var i in tmp_headers ){ 
+        const key = i.match(/\w+/gi).map(function(x){
             const st = x.match(/^\w/gi).join('');
             return x.replace(st,st.toLowerCase());
         }).join('-'); opt.headers[key] = tmp_headers[i]
@@ -81,9 +81,9 @@ function parseRange( range ){
 }
 
 function HTTPrequest( ..._args ){
-    return new Promise((response,reject)=>{
+    return new Promise(function(response,reject){
  
-        let { opt } = parseURL( _args ); delete opt.headers.host;
+        var { opt } = parseURL( _args ); devare opt.headers.host;
 
         if( opt.headers.range && !opt.headers.nochunked ) opt.headers.range = parseRange(opt.headers.range);
             opt.headers.referer = opt.currentUrl; opt.headers.origin = opt.currentUrl;
@@ -112,7 +112,7 @@ function HTTPrequest( ..._args ){
                 else return response( schema );
                 
             } catch(e) { reject(e); }
-        }).catch(e=>{ reject(e); })
+        }).catch(function(e){ reject(e); })
     
     });    
 }

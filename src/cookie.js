@@ -1,11 +1,11 @@
-const state = require('./state.js');
+const state  = require('./state.js');
 const output = new Object();
 
 function getState(){
     const state = new Object();
     const cookie = document.cookie.split(';');
     if( document.cookie == '' ) return state;
-    for( let i in cookie ){
+    for( var i in cookie ){
         const data = cookie[i].split('=');
               state[data[0]] = data[1];
     }   return state;
@@ -14,10 +14,10 @@ function getState(){
 output.state = new state( getState() );
 
 output.set = function(obj){ 
-    const result = new Array(); let state;
-    try { state = obj(output.state.state); } 
+    const result = new Array(); var state;
+    try { state  = obj(output.state.state); } 
     catch(e) { state = obj } output.state.set(obj);
-    for( let i in obj )
+    for( var i in obj )
         result.push(`${i}=${obj[i]}`); 
         document.cookie = result.join(';');
 }
